@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
       setIsLoading(true);
       const response = await axios.post('/api/auth/check-auth');
 
-      if (response.data.isAuthenticated) { //isAuthenticated가 true일때
+      if (response.data.isAuthenticated && response.data.user) { //isAuthenticated가 true일때
         setIsAuthenticated(true);
         setUser(response.data.user);
       } else {
@@ -61,10 +61,11 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await axios.post('/api/auth/login', req);
       if (response.status === 200) {
-        console.log("성공로직 실행")
-        setIsAuthenticated(true);
-        setUser(response.data.user);
-        console.log("로그인여부 :", isAuthenticated);
+        console.log("성공로직 실행");
+        await checkAuth();
+        // setIsAuthenticated(true);
+        // setUser(response.data.user);
+        // console.log("로그인여부 :", isAuthenticated);
         return true;
       }
       console.log("실패로직 실행")

@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const Posts = () => {
-  const [posts, setPosts] = useState([]);     // 게시글 목록 상태
+const ChatList = () => {
+  const [chatlist, setChatlist] = useState([]);     // 채팅 목록 상태
   const [loading, setLoading] = useState(true); // 로딩 상태
   const [error, setError] = useState(null);     // 에러 상태
   const [totalPages, setTotalPages] = useState(0);
@@ -12,10 +12,10 @@ const Posts = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchPosts = async () => {
+    const fetchChatList = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`/api/posts?page=${currentPage}&size=${pageSize}`);
+        const response = await axios.get(`/api/chatlist?page=${currentPage}&size=${pageSize}`);
         setPosts(response.data.content);
         setTotalPages(response.data.totalPages);
       } catch (error) {
@@ -25,7 +25,7 @@ const Posts = () => {
       }
     };
 
-    fetchPosts();
+    fetchChatList();
   }, [currentPage]);
 
   const handlePreviousPage = () => {
@@ -50,7 +50,7 @@ const Posts = () => {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       {posts.length === 0 ? (
         <div className="text-center py-12">
-          <div className="text-xl text-gray-600">게시글이 없습니다. 첫 번째 게시글을 작성해보세요! ✨</div>
+          <div className="text-xl text-gray-600">채팅방을 생성하세요</div>
         </div>
       ) : (
         <>
@@ -135,4 +135,4 @@ const Posts = () => {
   );
 }
 
-export default Posts;
+export default ChatList;

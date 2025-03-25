@@ -48,18 +48,18 @@ export const Layout = () => {
                             )}
 
                             {/* 공통 메뉴 아이템들 */}
-                            {/* {[
-                                { path: "/word", text: "단어검색" },
-                                { path: "/wordbook", text: "내 단어장" },
-                                { path: "/wordbook/ranking", text: "단어장 랭킹" },
-                                { path: "/chat", text: "채팅" }
+                            {[
+                                // { path: "/word", text: "단어검색" },
+                                // { path: "/wordbook", text: "내 단어장" },
+                                // { path: "/wordbook/ranking", text: "단어장 랭킹" },
+                                { path: "/chatlist", text: "채팅" }
                             ].map((item) => (
                                 <li key={item.path}>
                                     <a className="btn btn-ghost" onClick={() => navigate(item.path)}>
                                         {item.text}
                                     </a>
                                 </li>
-                            ))} */}
+                            ))}
 
                             {/* 로그인/로그아웃 */}
                             <li>

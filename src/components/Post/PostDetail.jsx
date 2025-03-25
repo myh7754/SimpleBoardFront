@@ -17,7 +17,7 @@ const PostDetail = () => {
     const [content, setContent] = useState('');
     const [replyingToCommentId, setReplyingToCommentId] = useState(null);
     const [isLiked, setIsLiked] = useState(false);
-    
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -85,11 +85,10 @@ const PostDetail = () => {
             alert('로그인이 필요합니다.');
             return;
         }
-    
+
         try {
             await axios.delete(`/api/posts/${postId}/comments/${commentId}`);
             // 댓글 삭제 후 댓글 리스트 새로고침
-            console.log("확실");
             const commentsResponse = await axios.get(`/api/posts/${postId}/comments`);
             setComments(commentsResponse.data);
         } catch (error) {
@@ -98,25 +97,42 @@ const PostDetail = () => {
         }
     };
 
+    const chatStart = async (commentAuthor) => {
+        if (!isAuthenticated) {
+            alert('로그인이 필요합니다.');
+            navigate('/login');
+            return;
+        }
+        
+        try {
+            console.log("채팅방 생성 작성자 , 상대", user.name)
+            const createChatRoomResponse = await axios.post('/api/chatroom', { memberName : user.name , opponentName: commentAuthor })
+            navigate(`/chat/${createChatRoomResponse.data}`);
+        } catch (error) {
+            alert("사용자 권한이 없습니다");
+            console.error('채팅방 생성 오류:', error);
+        }
+    }
+
 
 
     if (loading) return <div className="text-center py-8">로딩 중...</div>;
-    
+
 
     if (error) return <div className="text-center py-8 text-red-500">오류 발생: {error}</div>;
     if (!post) return <div className="text-center py-8">게시글을 찾을 수 없습니다.</div>;
 
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <PostBody 
-                post={post} 
-                comments={comments} 
-                navigate={navigate} 
-                countComments={countComments}    
+            <PostBody
+                post={post}
+                comments={comments}
+                navigate={navigate}
+                countComments={countComments}
                 isAuthenticated={isAuthenticated}
                 isLiked={isLiked}
                 setIsLiked={setIsLiked}
-                user={user}             
+                user={user}
             />
 
             <CommentSection
@@ -131,6 +147,7 @@ const PostDetail = () => {
                 countComments={countComments}
                 navigate={navigate}
                 replyingToCommentId={replyingToCommentId}
+                chatStart={chatStart}
             />
         </div>
     );
