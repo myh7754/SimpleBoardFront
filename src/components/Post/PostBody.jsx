@@ -3,7 +3,7 @@ import React from 'react';
 import { FaRegHeart, FaHeart } from 'react-icons/fa';
 import { useParams } from 'react-router-dom';
 import { useAuth } from '../../utils/AuthContext';
-
+import api from '../../utils/axiosConfig';
 import axios from 'axios';
 
 
@@ -17,7 +17,7 @@ const PostBody = ({ post, comments, navigate, countComments, isAuthenticated, is
             navigate('/login');
             return;
         }
-        const likeResponse = axios.post(`/api/posts/${postId}/likes`);
+        const likeResponse = api.post(`/api/posts/${postId}/likes`);
         setIsLiked(!isLiked);
     }
 
@@ -51,7 +51,7 @@ const PostBody = ({ post, comments, navigate, countComments, isAuthenticated, is
             return;
         }
         try {
-            await axios.delete(`/api/posts/${postId}`);
+            await api.delete(`/api/posts/${postId}`);
             navigate('/posts');
         } catch (error) {
             if (error.response?.status === 401) {

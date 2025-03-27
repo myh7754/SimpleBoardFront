@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import axios from './axiosConfig';
+import axios from 'axios';
 import Cookies from 'js-cookie';
 
 const AuthContext = createContext();
@@ -13,30 +13,34 @@ export const AuthProvider = ({ children }) => {
     try {
       setIsLoading(true);
       const response = await axios.post('/api/auth/check-auth');
-
-      if (response.data.isAuthenticated && response.data.user) { //isAuthenticated가 true일때
+      if (response.data.isAuthenticated && response.data.user) {
         setIsAuthenticated(true);
+        localStorage.setItem("loginCheck", true);
         setUser(response.data.user);
-      } else {
+      }
+      else if (!response.data.isAuthenticated && localStorage.getItem("loginCheck")=== "true") {
+        console.log("리프레시 요청", localStorage.getItem("loginCheck"));
         const refresh = await refreshAccessToken();
-        // if (refresh) {
-        const refreshResponse = await axios.post('/api/auth/check-auth');
-        if (refreshResponse.data.isAuthenticated) {
-          setIsAuthenticated(true);
-          setUser(refreshResponse.data.user);
-        } else {
-          setIsAuthenticated(false);
-          setUser(null);
-        }
-        // } else {
-        //   setIsAuthenticated(false);
-        //   setUser(null);
-        // }
+        // await checkAuth();
+        //   // if (refresh) {
+        // //   // const refreshResponse = await axios.post('/api/auth/check-auth');
+        // //   // if (refreshResponse.data.isAuthenticated) {
+        // //   //   setIsAuthenticated(true);
+        // //   //   setUser(refreshResponse.data.user);
+        // //   // } else {
+        // //   //   setIsAuthenticated(false);
+        // //   //   setUser(null);
+        // //   // }
+        // //   // } else {
+        // //   //   setIsAuthenticated(false);
+        // //   //   setUser(null);
+        //   // }
       }
     } catch (error) {
       console.error("인증 확인 오류:", error);
       setIsAuthenticated(false);
       setUser(null);
+      localStorage.setItem("loginCheck", false);
     } finally {
       setIsLoading(false);
     }
@@ -47,13 +51,14 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await axios.post('/api/auth/refresh');
       if (response.status === 200) {
-        console.log("리프레시")
-        return true;
+        await checkAuth();
       }
-      return false;
     } catch (error) {
       console.error('토큰 갱신 오류 :', error);
-      return false
+      setIsAuthenticated(false);
+      setUser(null);
+      localStorage.setItem("loginCheck", false);
+      alert("토큰이 만료되었습니다 다시 로그인해주세요.");
     }
   }
 
@@ -61,17 +66,11 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await axios.post('/api/auth/login', req);
       if (response.status === 200) {
-        console.log("성공로직 실행");
         await checkAuth();
-        // setIsAuthenticated(true);
-        // setUser(response.data.user);
-        // console.log("로그인여부 :", isAuthenticated);
         return true;
       }
-      console.log("실패로직 실행")
       return false;
     } catch (error) {
-      console.log("로그인 중 오류 발생");
       return false;
     }
   }
@@ -84,6 +83,7 @@ export const AuthProvider = ({ children }) => {
 
       // 특정 경로의 쿠키 삭제 
       Cookies.remove('refreshToken', { path: '/api/auth/refresh' });
+      localStorage.setItem("loginCheck", false);
       setIsAuthenticated(false);
       setUser(null);
       if (navigate) {
@@ -91,6 +91,7 @@ export const AuthProvider = ({ children }) => {
       }
     } catch (error) {
       console.error('로그아웃 중 오류 발생', error);
+      localStorage.setItem("loginChek", false);
       alert('로그아웃 중 오류 발생');
     }
   }

@@ -22,7 +22,6 @@ const LoginPage = () => {
     // 로그인 로직을 여기에 구현
 
     const response = await login({email, password});
-    console.log("login 요청 response : ",response);
     if (!response) {
       setError('로그인 실패. 아이디와 비밀번호를 확인하세요.');
       alert('로그인 실패 비밀번호 아이디를 제대로 입력하세요');
@@ -62,7 +61,7 @@ const LoginPage = () => {
                     required 
                     value={email} 
                     onChange={(e) => setEmail(e.target.value)}
-                    autocomplete="off"
+                    autoComplete="off"
                   />
                 </label>
               </div>

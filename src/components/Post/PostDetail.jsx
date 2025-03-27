@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import api from '../../utils/axiosConfig';
 import { useAuth } from '../../utils/AuthContext';
 import PostBody from '../Post/PostBody';
 import CommentSection from '../comment/CommentSection';
@@ -59,7 +60,7 @@ const PostDetail = () => {
                 postId: postId,
                 parentId: parentId,
             }
-            await axios.post(`/api/posts/${postId}/comments`, commentRequest);
+            await api.post(`/api/posts/${postId}/comments`, commentRequest);
             setContent('');
             setReplyingToCommentId(null);
 
@@ -87,7 +88,7 @@ const PostDetail = () => {
         }
 
         try {
-            await axios.delete(`/api/posts/${postId}/comments/${commentId}`);
+            await api.delete(`/api/posts/${postId}/comments/${commentId}`);
             // 댓글 삭제 후 댓글 리스트 새로고침
             const commentsResponse = await axios.get(`/api/posts/${postId}/comments`);
             setComments(commentsResponse.data);
@@ -103,10 +104,9 @@ const PostDetail = () => {
             navigate('/login');
             return;
         }
-        
         try {
             console.log("채팅방 생성 작성자 , 상대", user.name)
-            const createChatRoomResponse = await axios.post('/api/chatroom', { memberName : user.name , opponentName: commentAuthor })
+            const createChatRoomResponse = await api.post('/api/chatroom', { memberName : user.name , opponentName: commentAuthor })
             navigate(`/chat/${createChatRoomResponse.data}`);
         } catch (error) {
             alert("사용자 권한이 없습니다");

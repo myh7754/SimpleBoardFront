@@ -31,7 +31,6 @@ function Signup() {
       return;
     }
 
-    console.log("전송 데이터 : ", formData);
     axios.post('/api/auth/signup', formData, {
       headers: { 'Content-Type': 'application/json' }
     })
@@ -149,6 +148,7 @@ function Signup() {
                       name="nickname"
                       value={formData.nickname}
                       onChange={handleChange}
+                      autoComplete="off"
                     />
                   </label>
                   <button

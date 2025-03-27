@@ -5,8 +5,9 @@ import { useAuth } from '../../utils/AuthContext';
 import axios from '../../utils/axiosConfig';
 import { useParams } from 'react-router-dom';
 
+
 const Chat = () => {
-    const BaseUrl = "http://localhost:8080/ws";
+    const BaseUrl = "/ws";
     const [messages, setMessages] = useState([]);
     const { isAuthenticated, user } = useAuth();
     const [input, setInput] = useState('');
@@ -71,7 +72,7 @@ const Chat = () => {
     // 채팅 기록 페이징 처리 
     const fetchChatHistory = async (pageToFetch) => {
         try {
-            const response = await axios.get(`/api/chatroom/${chatRoomId}`, {
+            const response = await axios.get(`/api/chatmessage/${chatRoomId}`, {
                 params: { page: pageToFetch, size: 20 }
             });
 
