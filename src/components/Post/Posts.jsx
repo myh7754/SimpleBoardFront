@@ -78,7 +78,7 @@ const Posts = () => {
                       <p className ="text-sm text-gray-500">@{post.author} • {new Date(post.createdAt).toLocaleDateString()}</p>
                     </div>
                   </div>
-                  <button className ="btn btn-ghost btn-sm">✨ Follow</button>
+                  {/* <button className ="btn btn-ghost btn-sm">✨ Follow</button> */}
                 </div>
 
                 <h2 className ="card-title text-2xl mb-3">{post.title}</h2>

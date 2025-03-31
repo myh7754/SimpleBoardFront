@@ -21,20 +21,6 @@ export const AuthProvider = ({ children }) => {
       else if (!response.data.isAuthenticated && localStorage.getItem("loginCheck")=== "true") {
         console.log("리프레시 요청", localStorage.getItem("loginCheck"));
         const refresh = await refreshAccessToken();
-        // await checkAuth();
-        //   // if (refresh) {
-        // //   // const refreshResponse = await axios.post('/api/auth/check-auth');
-        // //   // if (refreshResponse.data.isAuthenticated) {
-        // //   //   setIsAuthenticated(true);
-        // //   //   setUser(refreshResponse.data.user);
-        // //   // } else {
-        // //   //   setIsAuthenticated(false);
-        // //   //   setUser(null);
-        // //   // }
-        // //   // } else {
-        // //   //   setIsAuthenticated(false);
-        // //   //   setUser(null);
-        //   // }
       }
     } catch (error) {
       console.error("인증 확인 오류:", error);

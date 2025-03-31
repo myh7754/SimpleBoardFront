@@ -20,7 +20,7 @@ export const Layout = () => {
                 <div className="navbar bg-base-300">
                     <div className="flex-1">
                         <a className="btn btn-ghost text-xl" onClick={() => navigate("/")}>
-                            WordWise
+                            DeBoard
                         </a>
                     </div>
                     <div className="flex-none">
